@@ -8,13 +8,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class HrClient {
-
-    private static final String REST_URI = "https://localhost:34346/soa2back-0.0.1-SNAPSHOT/workers/";
     private static final Client client = ClientBuilder.newBuilder().build();
 
     public static Response callXmlHrHireFireWorkerDTO(long id, HRHireFireWorkerDTO hrHireFireWorkerDTO) {
         HttpsURLConnection.setDefaultHostnameVerifier ((hostname, session) -> true);
-        return client.target(REST_URI + id).request(MediaType.APPLICATION_XML)
+        String rest_uri = System.getenv("SOA_CRUD_SERV_URL");
+        if (rest_uri == null || rest_uri.equals(""))
+            rest_uri = "https://localhost:34346/soa2back-0.0.1-SNAPSHOT/workers/";
+        return client.target(rest_uri + id).request(MediaType.APPLICATION_XML)
                 .post(Entity.entity(hrHireFireWorkerDTO, MediaType.APPLICATION_XML));
     }
 }
