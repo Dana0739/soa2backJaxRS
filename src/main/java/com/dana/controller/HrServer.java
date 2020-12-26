@@ -29,19 +29,14 @@ public class HrServer {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = dateFormat.parse(date);
-            Response response = HrClient.callXmlHrHireFireWorkerDTO(personId,
+            return HrClient.callXmlHrHireFireWorkerDTO(personId,
                     new HRHireFireWorkerDTO(orgId, Position.getByTitle(position),
                             Status.getByTitle(status), startDate));
-            System.out.println(response.getStatus());
-            System.out.println(response.getEntity().toString());
-            System.out.println(response.getStatusInfo().toString());
-            return response;
         } catch (IllegalArgumentException e) {
             return Response.status(422).entity(e.getMessage()).build();
         } catch (ParseException e) {
             return Response.status(422).entity("Could not parse date format: yyyy-MM-dd").build();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             for (int i = 0; i < e.getStackTrace().length; i++) {
                 System.out.println(e.getStackTrace()[i].toString());
             }
